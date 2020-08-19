@@ -7,7 +7,13 @@ trigger:
 
 resources:
 - repo: self
-
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.BinariesDirectory)'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
 variables:
   tag: '$(Build.BuildId)'
 
@@ -27,3 +33,10 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/forecast/Dockerfile'
         tags: |
           $(tag)
+          - task: ArchiveFiles@2
+            inputs:
+              rootFolderOrFile: '$(Build.BinariesDirectory)'
+              includeRootFolder: true
+              archiveType: 'zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+              replaceExistingArchive: true
